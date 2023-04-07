@@ -8,21 +8,16 @@ for(let btn of buttons){
 const searchWord = document.querySelector('#searchWord');
 const searchBtn = document.querySelector('#searchBtn');
 
-searchWord.addEventListener('input', (e)=>{
-    let search = e.target.value;
-    console.log(search);
-});
 searchBtn.addEventListener('click', ajaxCall);
 
 
 function ajaxCall(){
+    let elem = document.querySelector('.wordDetails');
+    elem.innerHTML =  "loading...";
     let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${searchWord.value}`;
     makeRequest(url).then(response => {
-        let elem = document.querySelector('.wordDetails');
+        
         let html = '' ;
-        let show = response[0].meanings[0];
-        console.log(show);  
-        console.log(response[0]);
         response[0].meanings.forEach(mean =>{
             html +=`<div class="text-muted fst-italic">${mean.partOfSpeech}</div>`
             mean.definitions.forEach(define =>{
@@ -35,7 +30,7 @@ function ajaxCall(){
         });
         elem.innerHTML = `<h4>${response[0].word}</h4>` + html;
     }).catch(error =>{
-        console.log('error accured')
+        console.log('Error Message: '+ error.statusText);
     });
 }
 
